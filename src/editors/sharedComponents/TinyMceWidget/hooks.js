@@ -10,6 +10,7 @@ import { StrictDict } from '../../utils';
 import pluginConfig from './pluginConfig';
 import * as module from './hooks';
 import tinyMCE from '../../data/constants/tinyMCE';
+import { thunkActions } from '../../data/redux'
 
 export const state = StrictDict({
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -136,6 +137,7 @@ export const setupCustomBehavior = ({
   images,
   setImage,
   lmsEndpointUrl,
+  dispatch,
 }) => (editor) => {
   // image upload button
   editor.ui.registry.addButton(tinyMCE.buttons.imageUploadButton, {
@@ -157,6 +159,24 @@ export const setupCustomBehavior = ({
     tooltip: 'Source code',
     onAction: openSourceCodeModal,
   });
+
+  editor.ui.registry.addButton(tinyMCE.buttons.code,
+    {
+      text: "Rephrase",
+      tooltip: "Rephrase selected text",
+      onAction: (api) => {
+        const content = tinymce.activeEditor.selection.getContent() ? tinymce.activeEditor.selection.getContent() : tinymce.activeEditor.getContent();
+        const course_key = window.location.pathname.split("/")[3];
+        dispatch(
+          thunkActions.app.rephrase(
+            { course_key: course_key, content: content }
+          ),
+        );
+      }
+
+    }
+  )
+
   // add a custom simple inline code block formatter.
   const setupCodeFormatting = (api) => {
     editor.formatter.formatChanged(
@@ -229,6 +249,7 @@ export const editorConfig = ({
   updateContent,
   content,
   minHeight,
+  dispatch,
 }) => {
   const {
     toolbar,
@@ -268,6 +289,7 @@ export const editorConfig = ({
         content,
         images,
         imageUrls: module.fetchImageUrls(images),
+        dispatch,
       }),
       quickbars_insert_toolbar: quickbarsInsertToolbar,
       quickbars_selection_toolbar: quickbarsSelectionToolbar,
