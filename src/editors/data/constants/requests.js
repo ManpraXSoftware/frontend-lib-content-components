@@ -27,4 +27,5 @@ export const RequestKeys = StrictDict({
   uploadImage: 'uploadImage',
   fetchAdvancedSettings: 'fetchAdvancedSettings',
   fetchVideoFeatures: 'fetchVideoFeatures',
+  rephrase: 'rephrase',
 });

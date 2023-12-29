@@ -79,6 +79,13 @@ export const fetchVideos = ({ onSuccess }) => (dispatch) => {
   // onSuccess(mockData.mockVideoData);
 };
 
+export const rephrase = ({ course_key, content }) => (dispatch) => {
+  dispatch(requests.rephrase({
+    course_key: course_key,
+    content: content,
+  }));
+};
+
 export default StrictDict({
   fetchBlock,
   fetchCourseDetails,
@@ -89,4 +96,5 @@ export default StrictDict({
   saveBlock,
   fetchAssets,
   uploadImage,
+  rephrase,
 });

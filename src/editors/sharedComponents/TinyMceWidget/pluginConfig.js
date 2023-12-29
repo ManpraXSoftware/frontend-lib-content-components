@@ -10,6 +10,7 @@ const pluginConfig = ({ isLibrary, placeholder, editorType }) => {
   const editImageSettings = isLibrary ? '' : buttons.editImageSettings;
   const codePlugin = editorType === 'text' ? plugins.code : '';
   const codeButton = editorType === 'text' ? buttons.code : '';
+  const aiMenubutton = editorType === 'text' ? buttons.aiMenubutton : '';
   const labelButton = editorType === 'question' ? buttons.customLabelButton : '';
   const quickToolbar = editorType === 'expandable' ? plugins.quickbars : '';
   const inline = editorType === 'expandable';
@@ -52,6 +53,7 @@ const pluginConfig = ({ isLibrary, placeholder, editorType }) => {
         [imageUploadButton, buttons.link, buttons.unlink, buttons.blockQuote, buttons.codeBlock],
         [buttons.table, buttons.emoticons, buttons.charmap, buttons.hr],
         [buttons.removeFormat, codeButton],
+        [aiMenubutton]
       ]) : false,
       imageToolbar: mapToolbars([
         // [buttons.rotate.left, buttons.rotate.right],

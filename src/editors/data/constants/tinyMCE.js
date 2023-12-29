@@ -40,6 +40,7 @@ export const buttons = StrictDict({
   link: 'link',
   unlink: 'unlink',
   numlist: 'numlist',
+  aiMenubutton:'aiMenubutton',
   outdent: 'outdent',
   redo: 'redo',
   removeFormat: 'removeformat',

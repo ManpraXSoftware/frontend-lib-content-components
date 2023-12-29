@@ -283,6 +283,18 @@ export const fetchVideoFeatures = ({ ...rest }) => (dispatch, getState) => {
   }));
 };
 
+export const rephrase = ({ course_key, content, ...rest }) => (dispatch, getState) => {
+  dispatch(module.networkRequest({
+    requestKey: RequestKeys.rephrase,
+    promise: api.rephrase({
+      course_key,
+      content,
+      studioEndpointUrl: selectors.app.studioEndpointUrl(getState()),
+    }),
+    ...rest,
+  }));
+};
+
 export default StrictDict({
   fetchBlock,
   fetchStudioView,
@@ -301,4 +313,5 @@ export default StrictDict({
   importTranscript,
   fetchAdvancedSettings,
   fetchVideoFeatures,
+  rephrase,
 });

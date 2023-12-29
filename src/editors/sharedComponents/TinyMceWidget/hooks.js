@@ -9,6 +9,7 @@ import { StrictDict } from '../../utils';
 import pluginConfig from './pluginConfig';
 import * as module from './hooks';
 import tinyMCE from '../../data/constants/tinyMCE';
+import { thunkActions } from '../../data/redux'
 
 export const state = StrictDict({
   isImageModalOpen: (val) => useState(val),
@@ -94,6 +95,7 @@ export const setupCustomBehavior = ({
   editorType,
   imageUrls,
   lmsEndpointUrl,
+  dispatch,
 }) => (editor) => {
   // image upload button
   editor.ui.registry.addButton(tinyMCE.buttons.imageUploadButton, {
@@ -113,6 +115,29 @@ export const setupCustomBehavior = ({
     tooltip: 'Source code',
     onAction: openSourceCodeModal,
   });
+  editor.ui.registry.addMenuButton(tinyMCE.buttons.aiMenubutton,
+    {
+      text: "AI",
+      fetch: (callback) => {
+        const items = [
+          {
+            type: "menuitem",
+            text: "Rephrase",
+            onAction: (api) => {
+              const content = tinymce.activeEditor.selection.getContent() ? tinymce.activeEditor.selection.getContent() : tinymce.activeEditor.getContent();
+              const course_key = window.location.pathname.split("/")[3];
+              dispatch(
+                thunkActions.app.rephrase(
+                  { course_key: course_key, content: content }
+                ),
+              );
+            },
+          },
+        ];
+        callback(items);
+      }
+    }
+  )
   // add a custom simple inline code block formatter.
   const setupCodeFormatting = (api) => {
     editor.formatter.formatChanged(
@@ -182,6 +207,7 @@ export const editorConfig = ({
   setSelection,
   updateContent,
   minHeight,
+  dispatch,
 }) => {
   const {
     toolbar,
@@ -218,6 +244,7 @@ export const editorConfig = ({
         lmsEndpointUrl,
         setImage: setSelection,
         imageUrls: module.fetchImageUrls(images),
+        dispatch,
       }),
       quickbars_insert_toolbar: quickbarsInsertToolbar,
       quickbars_selection_toolbar: quickbarsSelectionToolbar,

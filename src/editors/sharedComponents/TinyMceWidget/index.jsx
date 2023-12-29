@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Editor } from '@tinymce/tinymce-react';
 
@@ -42,6 +42,7 @@ export const TinyMceWidget = ({
   const { isSourceCodeOpen, openSourceCodeModal, closeSourceCodeModal } = hooks.sourceCodeModalToggle(editorRef);
   const images = hooks.filterAssets({ assets });
   const imageSelection = hooks.selectedImage(null);
+  const dispatch = useDispatch();
   return (
     <>
       {isLibrary ? null : (
@@ -66,19 +67,20 @@ export const TinyMceWidget = ({
         id={id}
         disabled={disabled}
         {
-          ...hooks.editorConfig({
-            openImgModal,
-            openSourceCodeModal,
-            editorType,
-            editorRef,
-            isLibrary,
-            lmsEndpointUrl,
-            studioEndpointUrl,
-            images,
-            setSelection: imageSelection.setSelection,
-            clearSelection: imageSelection.clearSelection,
-            ...props,
-          })
+        ...hooks.editorConfig({
+          openImgModal,
+          openSourceCodeModal,
+          editorType,
+          editorRef,
+          isLibrary,
+          lmsEndpointUrl,
+          studioEndpointUrl,
+          images,
+          dispatch: dispatch,
+          setSelection: imageSelection.setSelection,
+          clearSelection: imageSelection.clearSelection,
+          ...props,
+        })
         }
       />
     </>
