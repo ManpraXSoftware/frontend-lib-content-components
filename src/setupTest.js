@@ -1,8 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import 'babel-polyfill';
+import 'jest-canvas-mock';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -151,3 +152,8 @@ jest.mock('react-redux', () => {
     useSelector: jest.fn((selector) => ({ useSelector: selector })),
   };
 });
+
+// Mock the plugins repo so jest will stop complaining about ES6 syntax
+jest.mock('frontend-components-tinymce-advanced-plugins', () => ({
+  a11ycheckerCss: '',
+}));

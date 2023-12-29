@@ -10,7 +10,6 @@ import ScoringCard from './settingsComponents/ScoringCard';
 import ShowAnswerCard from './settingsComponents/ShowAnswerCard';
 import HintsCard from './settingsComponents/HintsCard';
 import ResetCard from './settingsComponents/ResetCard';
-import MatlabCard from './settingsComponents/MatlabCard';
 import TimerCard from './settingsComponents/TimerCard';
 import TypeCard from './settingsComponents/TypeCard';
 import ToleranceCard from './settingsComponents/Tolerance';
@@ -51,6 +50,7 @@ export const SettingsWidget = ({
         </div>
       );
     }
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     return (<></>);
   };
 
@@ -112,25 +112,26 @@ export const SettingsWidget = ({
               updateSettings={updateSettings}
             />
           </div>
-          {
-            problemType !== ProblemTypeKeys.ADVANCED && (
-            <div className="my-3">
-              <ResetCard showResetButton={settings.showResetButton} updateSettings={updateSettings} />
-            </div>
-            )
-          }
+          <div className="my-3">
+            <ResetCard
+              showResetButton={settings.showResetButton}
+              defaultValue={defaultSettings.showResetButton}
+              updateSettings={updateSettings}
+            />
+          </div>
           {
             problemType === ProblemTypeKeys.ADVANCED && (
             <div className="my-3">
-              <Randomization randomization={settings.randomization} updateSettings={updateSettings} />
+              <Randomization
+                randomization={settings.randomization}
+                defaultValue={defaultSettings.rerandomize}
+                updateSettings={updateSettings}
+              />
             </div>
             )
           }
           <div className="my-3">
             <TimerCard timeBetween={settings.timeBetween} updateSettings={updateSettings} />
-          </div>
-          <div className="my-3">
-            <MatlabCard matLabApiKey={settings.matLabApiKey} updateSettings={updateSettings} />
           </div>
           <div className="my-3">
             <SwitchToAdvancedEditorCard problemType={problemType} />
@@ -168,7 +169,8 @@ SettingsWidget.propTypes = {
   defaultSettings: PropTypes.shape({
     maxAttempts: PropTypes.number,
     showanswer: PropTypes.string,
-    showReseButton: PropTypes.bool,
+    showResetButton: PropTypes.bool,
+    rerandomize: PropTypes.string,
   }).isRequired,
   // eslint-disable-next-line
   settings: PropTypes.any.isRequired,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { injectIntl, FormattedMessage, intlShape } from '@edx/frontend-platform/i18n';
+import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { Form } from '@edx/paragon';
 import PropTypes from 'prop-types';
 import SettingsOption from '../../SettingsOption';
@@ -9,37 +9,42 @@ import { RandomizationTypesKeys, RandomizationTypes } from '../../../../../../..
 
 export const RandomizationCard = ({
   randomization,
+  defaultValue,
   updateSettings,
   // inject
   intl,
 }) => {
-  const { summary, handleChange } = useRandomizationSettingStatus({ randomization, updateSettings });
+  const curretRandomization = randomization || defaultValue;
+  const { summary, handleChange } = useRandomizationSettingStatus({
+    randomization: curretRandomization,
+    updateSettings,
+  });
   return (
     <SettingsOption
       title={intl.formatMessage(messages.randomizationSettingTitle)}
       summary={intl.formatMessage(summary.message)}
       none={!randomization}
     >
-      <div className="halfSpacedMessage">
-        <span>
-          <FormattedMessage {...messages.randomizationSettingText} />
-        </span>
+      <div className="mb-3">
+        {intl.formatMessage(messages.randomizationSettingText, { randomization })}
       </div>
 
       <Form.Group>
         <Form.Control
           as="select"
-          value={randomization}
+          value={curretRandomization}
           onChange={handleChange}
         >
-          {Object.values(RandomizationTypesKeys).map((randomizationType) => (
-            <option
-              key={randomizationType}
-              value={randomizationType}
-            >
-              {intl.formatMessage(RandomizationTypes[randomizationType])}
-            </option>
-          ))}
+          {
+            Object.values(RandomizationTypesKeys).map((randomizationType) => (
+              <option
+                key={randomizationType}
+                value={randomizationType}
+              >
+                {intl.formatMessage(RandomizationTypes[randomizationType])}
+              </option>
+            ))
+          }
         </Form.Control>
       </Form.Group>
 
@@ -48,6 +53,7 @@ export const RandomizationCard = ({
 };
 
 RandomizationCard.propTypes = {
+  defaultValue: PropTypes.string.isRequired,
   randomization: PropTypes.string.isRequired,
   updateSettings: PropTypes.func.isRequired,
   intl: intlShape.isRequired,

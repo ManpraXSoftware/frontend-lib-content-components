@@ -62,17 +62,14 @@ exports[`SettingsWidget snapshot snapshot: renders Settings widget for Advanced 
       <div
         className="my-3"
       >
-        <ResetCard />
+        <ResetCard
+          defaultValue={false}
+        />
       </div>
       <div
         className="my-3"
       >
         <TimerCard />
-      </div>
-      <div
-        className="my-3"
-      >
-        <MatlabCard />
       </div>
       <div
         className="my-3"
@@ -148,17 +145,14 @@ exports[`SettingsWidget snapshot snapshot: renders Settings widget page 1`] = `
       <div
         className="my-3"
       >
-        <ResetCard />
+        <ResetCard
+          defaultValue={false}
+        />
       </div>
       <div
         className="my-3"
       >
         <TimerCard />
-      </div>
-      <div
-        className="my-3"
-      >
-        <MatlabCard />
       </div>
       <div
         className="my-3"
@@ -234,17 +228,14 @@ exports[`SettingsWidget snapshot snapshot: renders Settings widget page advanced
       <div
         className="my-3"
       >
-        <ResetCard />
+        <ResetCard
+          defaultValue={false}
+        />
       </div>
       <div
         className="my-3"
       >
         <TimerCard />
-      </div>
-      <div
-        className="my-3"
-      >
-        <MatlabCard />
       </div>
       <div
         className="my-3"

@@ -5,10 +5,16 @@ import { selectors } from '../../../../../data/redux';
 import { AnswerOption, mapStateToProps } from './AnswerOption';
 
 jest.mock('../../../../../data/redux', () => ({
+  __esModule: true,
+  default: jest.fn(),
   selectors: {
     problem: {
+      answers: jest.fn(state => ({ answers: state })),
       problemType: jest.fn(state => ({ problemType: state })),
     },
+  },
+  thunkActions: {
+    video: jest.fn(),
   },
 }));
 

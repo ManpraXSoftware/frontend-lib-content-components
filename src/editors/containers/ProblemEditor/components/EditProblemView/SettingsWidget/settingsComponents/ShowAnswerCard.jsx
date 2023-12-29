@@ -18,12 +18,15 @@ export const ShowAnswerCard = ({
   // redux
   studioEndpointUrl,
   learningContextId,
+  isLibrary,
 }) => {
   const {
     handleShowAnswerChange,
     handleAttemptsChange,
     showAttempts,
   } = useAnswerSettings(showAnswer, updateSettings);
+
+  const currentShowAnswer = showAnswer.on || defaultValue;
 
   const showAnswerSection = (
     <>
@@ -32,15 +35,17 @@ export const ShowAnswerCard = ({
           <FormattedMessage {...messages.showAnswerSettingText} />
         </span>
       </div>
-      <div className="pb-4">
-        <Hyperlink destination={`${studioEndpointUrl}/settings/advanced/${learningContextId}#showanswer`} target="_blank">
-          <FormattedMessage {...messages.advancedSettingsLinkText} />
-        </Hyperlink>
-      </div>
+      {!isLibrary && (
+        <div className="pb-4">
+          <Hyperlink destination={`${studioEndpointUrl}/settings/advanced/${learningContextId}#showanswer`} target="_blank">
+            <FormattedMessage {...messages.advancedSettingsLinkText} />
+          </Hyperlink>
+        </div>
+      )}
       <Form.Group className="pb-0 mb-0">
         <Form.Control
           as="select"
-          value={showAnswer.on}
+          value={currentShowAnswer}
           onChange={handleShowAnswerChange}
         >
           {Object.values(ShowAnswerTypesKeys).map((answerType) => {
@@ -76,7 +81,7 @@ export const ShowAnswerCard = ({
   return (
     <SettingsOption
       title={intl.formatMessage(messages.showAnswerSettingsTitle)}
-      summary={intl.formatMessage(ShowAnswerTypes[showAnswer.on])}
+      summary={intl.formatMessage(ShowAnswerTypes[currentShowAnswer])}
     >
       {showAnswerSection}
     </SettingsOption>
@@ -90,16 +95,20 @@ ShowAnswerCard.propTypes = {
   solutionExplanation: PropTypes.string,
   updateSettings: PropTypes.func.isRequired,
   studioEndpointUrl: PropTypes.string.isRequired,
-  learningContextId: PropTypes.string.isRequired,
-  defaultValue: PropTypes.string.isRequired,
+  learningContextId: PropTypes.string,
+  isLibrary: PropTypes.bool.isRequired,
+  defaultValue: PropTypes.string,
 };
 ShowAnswerCard.defaultProps = {
   solutionExplanation: '',
+  learningContextId: null,
+  defaultValue: 'finished',
 };
 
 export const mapStateToProps = (state) => ({
   studioEndpointUrl: selectors.app.studioEndpointUrl(state),
   learningContextId: selectors.app.learningContextId(state),
+  isLibrary: selectors.app.isLibrary(state),
 });
 
 export const mapDispatchToProps = {};

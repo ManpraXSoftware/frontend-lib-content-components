@@ -7,6 +7,7 @@ import {
   textInputWithFeedbackAndHintsOLX,
   multipleChoiceWithFeedbackAndHintsOLX,
   textInputWithFeedbackAndHintsOLXWithMultipleAnswers,
+  numberParseTestOLX,
 } from './mockData/olxTestData';
 import {
   checkboxesWithFeedbackAndHints,
@@ -16,11 +17,12 @@ import {
   numericInputWithFeedbackAndHints,
   numericInputWithAnswerRange,
   textInputWithFeedbackAndHintsWithMultipleAnswers,
+  numberParseTest,
 } from './mockData/editorTestData';
 import ReactStateOLXParser from './ReactStateOLXParser';
 
-describe('Check React Sate OLXParser problem', () => {
-  test('Test checkbox with feedback and hints problem type', () => {
+describe('Check React State OLXParser problem', () => {
+  test('for checkbox with feedback and hints problem type', () => {
     const olxparser = new OLXParser(checkboxesOLXWithFeedbackAndHintsOLX.rawOLX);
     const problem = olxparser.getParsedOLXData();
     const stateParser = new ReactStateOLXParser({
@@ -90,5 +92,27 @@ describe('Check React Sate OLXParser problem', () => {
     });
     const buildOLX = stateParser.buildOLX();
     expect(buildOLX.replace(/\s/g, '')).toEqual(textInputWithFeedbackAndHintsOLXWithMultipleAnswers.buildOLX.replace(/\s/g, ''));
+  });
+  describe('encode/decode', () => {
+    test('does not change hex values to dec and does not remove leading 0s', () => {
+      const olxparser = new OLXParser(numberParseTestOLX.rawOLX);
+      const problem = olxparser.getParsedOLXData();
+      const stateParser = new ReactStateOLXParser({
+        problem,
+        editorObject: numberParseTest,
+      });
+      const buildOLX = stateParser.buildOLX();
+      expect(buildOLX.replace(/\s/g, '')).toEqual(numberParseTestOLX.buildOLX.replace(/\s/g, ''));
+    });
+    test('correctly preserves whitespace inside pre tags', () => {
+      const stateParser = new ReactStateOLXParser({
+        problem: { problemType: 'optionresponse', answers: [] },
+        editorObject: { question: '<pre>  1  a<br />  2  b<br /></pre>', hints: [] },
+      });
+      const buildOLX = stateParser.buildOLX();
+      expect(buildOLX).toEqual(
+        '<problem><optionresponse>\n<pre>  1  a<br/>  2  b<br/></pre><optioninput></optioninput></optionresponse>\n</problem>',
+      );
+    });
   });
 });

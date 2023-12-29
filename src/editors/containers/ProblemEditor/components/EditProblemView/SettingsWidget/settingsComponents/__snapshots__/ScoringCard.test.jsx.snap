@@ -8,7 +8,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card 1`] = `
   summary="{weight, plural, =0 {Ungraded} other {# points}} · {attempts, plural, =1 {# attempt} other {# attempts}}"
   title="Scoring"
 >
-  <Form.Label
+  <div
     className="mb-4"
   >
     <FormattedMessage
@@ -16,7 +16,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card 1`] = `
       description="Descriptive text for scoring settings"
       id="authoring.problemeditor.settings.scoring.label"
     />
-  </Form.Label>
+  </div>
   <Form.Group>
     <Form.Control
       floatingLabel="Points"
@@ -41,7 +41,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card 1`] = `
     />
     <Form.Control.Feedback>
       <FormattedMessage
-        defaultMessage="If a value is not set, unlimited attempts are allowed"
+        defaultMessage="If a default value is not set in advanced settings, unlimited attempts are allowed"
         description="Summary text for scoring weight"
         id="authoring.problemeditor.settings.scoring.attempts.hint"
       />
@@ -49,9 +49,10 @@ exports[`ScoringCard snapshot snapshot: scoring setting card 1`] = `
     <Form.Checkbox
       checked={false}
       className="mt-3 decoration-control-label"
+      disabled={true}
     >
       <div
-        className="small"
+        className="x-small"
       >
         <FormattedMessage
           defaultMessage="Unlimited attempts"
@@ -62,7 +63,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card 1`] = `
     </Form.Checkbox>
   </Form.Group>
   <Hyperlink
-    destination="undefined/settings/advanced/undefined#max_attempts"
+    destination="undefined/settings/advanced/null#max_attempts"
     target="_blank"
   >
     <FormattedMessage
@@ -82,7 +83,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card max attempts 1`] = 
   summary="{weight, plural, =0 {Ungraded} other {# points}} · Unlimited attempts"
   title="Scoring"
 >
-  <Form.Label
+  <div
     className="mb-4"
   >
     <FormattedMessage
@@ -90,7 +91,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card max attempts 1`] = 
       description="Descriptive text for scoring settings"
       id="authoring.problemeditor.settings.scoring.label"
     />
-  </Form.Label>
+  </div>
   <Form.Group>
     <Form.Control
       floatingLabel="Points"
@@ -115,7 +116,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card max attempts 1`] = 
     />
     <Form.Control.Feedback>
       <FormattedMessage
-        defaultMessage="If a value is not set, unlimited attempts are allowed"
+        defaultMessage="If a default value is not set in advanced settings, unlimited attempts are allowed"
         description="Summary text for scoring weight"
         id="authoring.problemeditor.settings.scoring.attempts.hint"
       />
@@ -123,9 +124,10 @@ exports[`ScoringCard snapshot snapshot: scoring setting card max attempts 1`] = 
     <Form.Checkbox
       checked={true}
       className="mt-3 decoration-control-label"
+      disabled={true}
     >
       <div
-        className="small"
+        className="x-small"
       >
         <FormattedMessage
           defaultMessage="Unlimited attempts"
@@ -136,7 +138,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card max attempts 1`] = 
     </Form.Checkbox>
   </Form.Group>
   <Hyperlink
-    destination="undefined/settings/advanced/undefined#max_attempts"
+    destination="undefined/settings/advanced/null#max_attempts"
     target="_blank"
   >
     <FormattedMessage
@@ -156,7 +158,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card zero zero weight 1`
   summary="{weight, plural, =0 {Ungraded} other {# points}} · {attempts, plural, =1 {# attempt} other {# attempts}}"
   title="Scoring"
 >
-  <Form.Label
+  <div
     className="mb-4"
   >
     <FormattedMessage
@@ -164,7 +166,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card zero zero weight 1`
       description="Descriptive text for scoring settings"
       id="authoring.problemeditor.settings.scoring.label"
     />
-  </Form.Label>
+  </div>
   <Form.Group>
     <Form.Control
       floatingLabel="Points"
@@ -189,7 +191,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card zero zero weight 1`
     />
     <Form.Control.Feedback>
       <FormattedMessage
-        defaultMessage="If a value is not set, unlimited attempts are allowed"
+        defaultMessage="If a default value is not set in advanced settings, unlimited attempts are allowed"
         description="Summary text for scoring weight"
         id="authoring.problemeditor.settings.scoring.attempts.hint"
       />
@@ -197,9 +199,10 @@ exports[`ScoringCard snapshot snapshot: scoring setting card zero zero weight 1`
     <Form.Checkbox
       checked={false}
       className="mt-3 decoration-control-label"
+      disabled={true}
     >
       <div
-        className="small"
+        className="x-small"
       >
         <FormattedMessage
           defaultMessage="Unlimited attempts"
@@ -210,7 +213,7 @@ exports[`ScoringCard snapshot snapshot: scoring setting card zero zero weight 1`
     </Form.Checkbox>
   </Form.Group>
   <Hyperlink
-    destination="undefined/settings/advanced/undefined#max_attempts"
+    destination="undefined/settings/advanced/null#max_attempts"
     target="_blank"
   >
     <FormattedMessage

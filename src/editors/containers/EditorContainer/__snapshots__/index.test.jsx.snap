@@ -2,19 +2,19 @@
 
 exports[`EditorContainer component render snapshot: initialized. enable save and pass to header 1`] = `
 <div
-  className="position-relative zindex-0"
+  className="d-flex flex-column position-relative zindex-0"
+  style={
+    Object {
+      "minHeight": "100%",
+    }
+  }
 >
   <BaseModal
+    bodyStyle={null}
     close={[MockFunction closeCancelConfirmModal]}
     confirmAction={
       <Button
-        onClick={
-          Object {
-            "handleCancel": Object {
-              "onClose": [MockFunction props.onClose],
-            },
-          }
-        }
+        onClick={[Function]}
         variant="primary"
       >
         <FormattedMessage
@@ -25,6 +25,8 @@ exports[`EditorContainer component render snapshot: initialized. enable save and
       </Button>
     }
     footerAction={null}
+    headerComponent={null}
+    isFullscreenScroll={true}
     isOpen={false}
     size="md"
     title="Exit the editor?"
@@ -42,7 +44,7 @@ exports[`EditorContainer component render snapshot: initialized. enable save and
       className="d-flex flex-row justify-content-between"
     >
       <h2
-        className="h3 d-flex flex-row align-items-center"
+        className="h3 col pl-0"
       >
         <injectIntl(ShimmedIntlComponent)
           isInitialized={true}
@@ -56,7 +58,7 @@ exports[`EditorContainer component render snapshot: initialized. enable save and
     </div>
   </ModalDialog.Header>
   <ModalDialog.Body
-    className="pb-6"
+    className="pb-0 mb-6"
   >
     <h1>
       My test content
@@ -70,6 +72,7 @@ exports[`EditorContainer component render snapshot: initialized. enable save and
         "handleSaveClicked": Object {
           "dispatch": [MockFunction react-redux.dispatch],
           "getContent": [MockFunction props.getContent],
+          "returnFunction": [MockFunction props.returnFunction],
           "validateEntry": [MockFunction props.validateEntry],
         },
       }
@@ -80,19 +83,19 @@ exports[`EditorContainer component render snapshot: initialized. enable save and
 
 exports[`EditorContainer component render snapshot: not initialized. disable save and pass to header 1`] = `
 <div
-  className="position-relative zindex-0"
+  className="d-flex flex-column position-relative zindex-0"
+  style={
+    Object {
+      "minHeight": "100%",
+    }
+  }
 >
   <BaseModal
+    bodyStyle={null}
     close={[MockFunction closeCancelConfirmModal]}
     confirmAction={
       <Button
-        onClick={
-          Object {
-            "handleCancel": Object {
-              "onClose": [MockFunction props.onClose],
-            },
-          }
-        }
+        onClick={[Function]}
         variant="primary"
       >
         <FormattedMessage
@@ -103,6 +106,8 @@ exports[`EditorContainer component render snapshot: not initialized. disable sav
       </Button>
     }
     footerAction={null}
+    headerComponent={null}
+    isFullscreenScroll={true}
     isOpen={false}
     size="md"
     title="Exit the editor?"
@@ -120,7 +125,7 @@ exports[`EditorContainer component render snapshot: not initialized. disable sav
       className="d-flex flex-row justify-content-between"
     >
       <h2
-        className="h3 d-flex flex-row align-items-center"
+        className="h3 col pl-0"
       >
         <injectIntl(ShimmedIntlComponent)
           isInitialized={false}
@@ -134,7 +139,7 @@ exports[`EditorContainer component render snapshot: not initialized. disable sav
     </div>
   </ModalDialog.Header>
   <ModalDialog.Body
-    className="pb-6"
+    className="pb-0 mb-6"
   />
   <injectIntl(ShimmedIntlComponent)
     disableSave={true}
@@ -144,6 +149,7 @@ exports[`EditorContainer component render snapshot: not initialized. disable sav
         "handleSaveClicked": Object {
           "dispatch": [MockFunction react-redux.dispatch],
           "getContent": [MockFunction props.getContent],
+          "returnFunction": [MockFunction props.returnFunction],
           "validateEntry": [MockFunction props.validateEntry],
         },
       }

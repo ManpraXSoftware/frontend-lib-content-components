@@ -55,7 +55,6 @@ export const problemDataProps = {
     }),
     hints: PropTypes.arrayOf(PropTypes.string),
     timeBetween: PropTypes.number,
-    matLabApiKey: PropTypes.string,
     showAnswer: PropTypes.shape({
       on: PropTypes.instanceOf(ShowAnswerTypes),
       afterAtempts: PropTypes.number,
@@ -65,6 +64,7 @@ export const problemDataProps = {
       max_attempts: PropTypes.number,
       showanswer: PropTypes.string,
       show_reset_button: PropTypes.bool,
+      rerandomize: PropTypes.string,
     }),
   }),
 };

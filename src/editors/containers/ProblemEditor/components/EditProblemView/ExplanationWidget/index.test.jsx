@@ -6,9 +6,16 @@ import { selectors } from '../../../../../data/redux';
 import { ExplanationWidget, mapStateToProps } from '.';
 
 jest.mock('../../../../../data/redux', () => ({
+  __esModule: true,
+  default: jest.fn(),
   selectors: {
     problem: {
       settings: jest.fn(state => ({ question: state })),
+    },
+  },
+  thunkActions: {
+    video: {
+      importTranscript: jest.fn(),
     },
   },
 }));

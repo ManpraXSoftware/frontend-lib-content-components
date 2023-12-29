@@ -15,6 +15,7 @@ export const Editor = ({
   lmsEndpointUrl,
   studioEndpointUrl,
   onClose,
+  returnFunction,
 }) => {
   const dispatch = useDispatch();
   hooks.initializeApp({
@@ -30,14 +31,24 @@ export const Editor = ({
 
   const EditorComponent = supportedEditors[blockType];
   return (
-    <div className="d-flex flex-column">
+    <div
+      className="d-flex flex-column"
+      style={{
+        /* Positioned as a proper Paragon FullscreenModal should have been. */
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '100%',
+      }}
+    >
       <div
-        className="pgn__modal-fullscreen"
+        className="pgn__modal-fullscreen h-100"
         role="dialog"
         aria-label={blockType}
       >
         {(EditorComponent !== undefined)
-          ? <EditorComponent onClose={onClose} />
+          ? <EditorComponent {...{ onClose, returnFunction }} />
           : <FormattedMessage {...messages.couldNotFindEditor} />}
       </div>
     </div>
@@ -48,6 +59,7 @@ Editor.defaultProps = {
   learningContextId: null,
   lmsEndpointUrl: null,
   onClose: null,
+  returnFunction: null,
   studioEndpointUrl: null,
 };
 
@@ -57,6 +69,7 @@ Editor.propTypes = {
   learningContextId: PropTypes.string,
   lmsEndpointUrl: PropTypes.string,
   onClose: PropTypes.func,
+  returnFunction: PropTypes.func,
   studioEndpointUrl: PropTypes.string,
 };
 

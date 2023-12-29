@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+import _, { isEmpty } from 'lodash-es';
 import { actions, selectors } from '..';
 import { removeItemOnce } from '../../../utils';
 import * as requests from './requests';
@@ -5,11 +7,36 @@ import * as module from './video';
 import { valueFromDuration } from '../../../containers/VideoEditor/components/VideoSettingsModal/components/DurationWidget/hooks';
 import { parseYoutubeId } from '../../services/cms/api';
 
-export const loadVideoData = () => (dispatch, getState) => {
+export const loadVideoData = (selectedVideoId, selectedVideoUrl) => (dispatch, getState) => {
   const state = getState();
-  const rawVideoData = state.app.blockValue.data.metadata ? state.app.blockValue.data.metadata : {};
-  const courseLicenseData = state.app.courseDetails.data ? state.app.courseDetails.data : {};
-  const studioView = state.app.studioView?.data?.html;
+  const blockValueData = state.app.blockValue.data;
+  let rawVideoData = blockValueData.metadata ? blockValueData.metadata : {};
+  const rawVideos = Object.values(selectors.app.videos(state));
+  if (selectedVideoId !== undefined && selectedVideoId !== null) {
+    const selectedVideo = _.find(rawVideos, video => {
+      if (_.has(video, 'edx_video_id')) {
+        return video.edx_video_id === selectedVideoId;
+      }
+      return false;
+    });
+
+    if (selectedVideo !== undefined && selectedVideo !== null) {
+      rawVideoData = {
+        edx_video_id: selectedVideo.edx_video_id,
+        thumbnail: selectedVideo.course_video_image_url,
+        duration: selectedVideo.duration,
+        transcriptsFromSelected: selectedVideo.transcripts,
+        selectedVideoTranscriptUrls: selectedVideo.transcript_urls,
+      };
+    }
+  }
+
+  const courseData = state.app.courseDetails.data ? state.app.courseDetails.data : {};
+  let studioView = state.app.studioView?.data?.html;
+  if (state.app.blockId.startsWith('lb:')) {
+    studioView = state.app.studioView?.data?.content;
+  }
+
   const {
     videoId,
     videoUrl,
@@ -19,26 +46,39 @@ export const loadVideoData = () => (dispatch, getState) => {
     youtubeId: rawVideoData.youtube_id_1_0,
     html5Sources: rawVideoData.html5_sources,
   });
+
+  // Use the selected video url first
+  const videoSourceUrl = selectedVideoUrl != null ? selectedVideoUrl : videoUrl;
   const [licenseType, licenseOptions] = module.parseLicense({ licenseData: studioView, level: 'block' });
-  const transcripts = module.parseTranscripts({ transcriptsData: studioView });
+  // eslint-disable-next-line no-console
+  console.log(licenseType);
+  const transcripts = rawVideoData.transcriptsFromSelected ? rawVideoData.transcriptsFromSelected
+    : module.parseTranscripts({ transcriptsData: studioView });
+
   const [courseLicenseType, courseLicenseDetails] = module.parseLicense({
-    licenseData: courseLicenseData.license,
+    licenseData: courseData.license,
     level: 'course',
   });
-
+  const allowVideoSharing = module.parseVideoSharingSetting({
+    courseSetting: blockValueData?.video_sharing_options,
+    blockSetting: rawVideoData.public_access,
+  });
   dispatch(actions.video.load({
-    videoSource: videoUrl || '',
+    videoSource: videoSourceUrl || '',
     videoId,
     fallbackVideos,
     allowVideoDownloads: rawVideoData.download_video,
-    allowVideoSharing: rawVideoData.public_access,
+    allowVideoSharing,
+    videoSharingLearnMoreLink: blockValueData?.video_sharing_doc_url,
+    videoSharingEnabledForCourse: blockValueData?.video_sharing_enabled,
     transcripts,
+    selectedVideoTranscriptUrls: rawVideoData.selectedVideoTranscriptUrls,
     allowTranscriptDownloads: rawVideoData.download_track,
     showTranscriptByDefault: rawVideoData.show_captions,
     duration: { // TODO duration is not always sent so they should be calculated.
       startTime: valueFromDuration(rawVideoData.start_time || '00:00:00'),
       stopTime: valueFromDuration(rawVideoData.end_time || '00:00:00'),
-      total: 0, // TODO can we get total duration? if not, probably dropping from widget
+      total: rawVideoData.duration || 0, // TODO can we get total duration? if not, probably dropping from widget
     },
     handout: rawVideoData.handout,
     licenseType,
@@ -60,10 +100,10 @@ export const loadVideoData = () => (dispatch, getState) => {
   dispatch(requests.fetchVideoFeatures({
     onSuccess: (response) => dispatch(actions.video.updateField({
       allowThumbnailUpload: response.data.allowThumbnailUpload,
-      videoSharingEnabledForCourse: response.data.videoSharingEnabled,
+      videoSharingEnabledForAll: response.data.videoSharingEnabled,
     })),
   }));
-  const youTubeId = parseYoutubeId(videoUrl);
+  const youTubeId = parseYoutubeId(videoSourceUrl);
   if (youTubeId) {
     dispatch(requests.checkTranscriptsForImport({
       videoId,
@@ -99,6 +139,19 @@ export const determineVideoSources = ({
   };
 };
 
+export const parseVideoSharingSetting = ({ courseSetting, blockSetting }) => {
+  switch (courseSetting) {
+    case 'all-on':
+      return { level: 'course', value: true };
+    case 'all-off':
+      return { level: 'course', value: false };
+    case 'per-video':
+      return { level: 'block', value: blockSetting };
+    default:
+      return { level: 'block', value: blockSetting };
+  }
+};
+
 export const parseTranscripts = ({ transcriptsData }) => {
   if (!transcriptsData) {
     return [];
@@ -116,6 +169,7 @@ export const parseTranscripts = ({ transcriptsData }) => {
     return Object.keys(transcriptsObj.value);
   } catch (error) {
     if (error instanceof SyntaxError) {
+      // eslint-disable-next-line no-console
       console.error('Invalid JSON:', error.message);
     } else {
       throw error;
@@ -213,6 +267,7 @@ export const uploadThumbnail = ({ thumbnail, emptyCanvas }) => (dispatch, getSta
         }));
       }
     },
+    // eslint-disable-next-line no-console
     onFailure: (e) => console.log({ UploadFailure: e }, 'Resampling thumbnail upload'),
   }));
 };
@@ -235,7 +290,7 @@ export const importTranscript = () => (dispatch, getState) => {
   const state = getState();
   const { transcripts, videoSource } = state.video;
   // Remove the placeholder '' from the unset language from the list of transcripts.
-  const transcriptsPlaceholderRemoved = (transcripts === []) ? transcripts : removeItemOnce(transcripts, '');
+  const transcriptsPlaceholderRemoved = isEmpty(transcripts) ? transcripts : removeItemOnce(transcripts, '');
 
   dispatch(requests.importTranscript({
     youTubeId: parseYoutubeId(videoSource),
@@ -259,8 +314,7 @@ export const uploadTranscript = ({ language, file }) => (dispatch, getState) => 
   const state = getState();
   const { transcripts, videoId } = state.video;
   // Remove the placeholder '' from the unset language from the list of transcripts.
-  const transcriptsPlaceholderRemoved = (transcripts === []) ? transcripts : removeItemOnce(transcripts, '');
-
+  const transcriptsPlaceholderRemoved = isEmpty(transcripts) ? transcripts : removeItemOnce(transcripts, '');
   dispatch(requests.uploadTranscript({
     language,
     videoId,
@@ -333,6 +387,48 @@ export const replaceTranscript = ({ newFile, newFilename, language }) => (dispat
   }));
 };
 
+export const uploadVideo = ({ supportedFiles, setLoadSpinner, postUploadRedirect }) => (dispatch) => {
+  const data = { files: [] };
+  setLoadSpinner(true);
+  supportedFiles.forEach((file) => {
+    const fileData = file.get('file');
+    data.files.push({
+      file_name: fileData.name,
+      content_type: fileData.type,
+    });
+  });
+  dispatch(requests.uploadVideo({
+    data,
+    onSuccess: async (response) => {
+      const { files } = response.data;
+      await Promise.all(Object.values(files).map(async (fileObj) => {
+        const fileName = fileObj.file_name;
+        const edxVideoId = fileObj.edx_video_id;
+        const uploadUrl = fileObj.upload_url;
+        const uploadFile = supportedFiles.find((file) => file.get('file').name === fileName);
+        if (!uploadFile) {
+          // eslint-disable-next-line no-console
+          console.error(`Could not find file object with name "${fileName}" in supportedFiles array.`);
+          return;
+        }
+        const formData = new FormData();
+        formData.append('uploaded-file', uploadFile.get('file'));
+        await fetch(uploadUrl, {
+          method: 'PUT',
+          body: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+          .then(() => postUploadRedirect(edxVideoId))
+          // eslint-disable-next-line no-console
+          .catch((error) => console.error('Error uploading file:', error));
+      }));
+      setLoadSpinner(false);
+    },
+  }));
+};
+
 export default {
   loadVideoData,
   determineVideoSources,
@@ -345,4 +441,5 @@ export default {
   updateTranscriptLanguage,
   replaceTranscript,
   uploadHandout,
+  uploadVideo,
 };

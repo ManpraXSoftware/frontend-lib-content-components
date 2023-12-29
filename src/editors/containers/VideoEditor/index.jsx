@@ -17,10 +17,12 @@ import messages from './messages';
 
 export const VideoEditor = ({
   onClose,
+  returnFunction,
   // injected
   intl,
   // redux
   studioViewFinished,
+  isLibrary,
 }) => {
   const {
     error,
@@ -31,18 +33,27 @@ export const VideoEditor = ({
       <EditorContainer
         getContent={fetchVideoContent()}
         onClose={onClose}
+        returnFunction={returnFunction}
         validateEntry={validateEntry}
       >
         {studioViewFinished ? (
           <div className="video-editor">
-            <VideoEditorModal />
+            <VideoEditorModal {...{ isLibrary }} />
           </div>
         ) : (
-          <Spinner
-            animation="border"
-            className="m-3"
-            screenreadertext={intl.formatMessage(messages.spinnerScreenReaderText)}
-          />
+          <div style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+          >
+            <Spinner
+              animation="border"
+              className="m-3"
+              screenreadertext={intl.formatMessage(messages.spinnerScreenReaderText)}
+            />
+          </div>
         )}
       </EditorContainer>
     </ErrorContext.Provider>
@@ -51,17 +62,21 @@ export const VideoEditor = ({
 
 VideoEditor.defaultProps = {
   onClose: null,
+  returnFunction: null,
 };
 VideoEditor.propTypes = {
   onClose: PropTypes.func,
+  returnFunction: PropTypes.func,
   // injected
   intl: intlShape.isRequired,
   // redux
   studioViewFinished: PropTypes.bool.isRequired,
+  isLibrary: PropTypes.bool.isRequired,
 };
 
 export const mapStateToProps = (state) => ({
   studioViewFinished: selectors.requests.isFinished(state, { requestKey: RequestKeys.fetchStudioView }),
+  isLibrary: selectors.app.isLibrary(state),
 });
 
 export const mapDispatchToProps = {};
