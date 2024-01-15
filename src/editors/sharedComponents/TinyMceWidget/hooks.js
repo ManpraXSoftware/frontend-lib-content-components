@@ -96,6 +96,7 @@ export const setupCustomBehavior = ({
   imageUrls,
   lmsEndpointUrl,
   dispatch,
+  openAiImageModal,
 }) => (editor) => {
   // image upload button
   editor.ui.registry.addButton(tinyMCE.buttons.imageUploadButton, {
@@ -119,25 +120,34 @@ export const setupCustomBehavior = ({
     {
       text: "AI",
       fetch: (callback) => {
-        const items = [
+        var items = [
           {
             type: "menuitem",
             text: "Rephrase",
-            onAction: (api) => {
-              const content = tinymce.activeEditor.selection.getContent() ? tinymce.activeEditor.selection.getContent() : tinymce.activeEditor.getContent();
-              const course_key = window.location.pathname.split("/")[3];
-              dispatch(
-                thunkActions.app.rephrase(
-                  { course_key: course_key, content: content }
-                ),
-              );
-            },
+            title: "Rephrase selected text.",
+            disabled: tinymce.activeEditor.selection.getContent() ? false : true,
+            onAction: function onAction(api) {
+              var content = tinymce.activeEditor.selection.getContent();
+              var courseKey = window.location.pathname.split("/")[3];
+              dispatch(thunkActions.app.rephrase({
+                courseKey: courseKey,
+                content: content
+              }));
+            }
+          },
+          {
+            type: "menuitem",
+            text: "Generate image",
+            title: "Generate an image based on selected text.",
+            onAction: function onAction(api) {
+              openAiImageModal();
+            }
           },
         ];
         callback(items);
       }
     }
-  )
+  );
   // add a custom simple inline code block formatter.
   const setupCodeFormatting = (api) => {
     editor.formatter.formatChanged(
@@ -208,6 +218,7 @@ export const editorConfig = ({
   updateContent,
   minHeight,
   dispatch,
+  openAiImageModal,
 }) => {
   const {
     toolbar,
@@ -245,6 +256,7 @@ export const editorConfig = ({
         setImage: setSelection,
         imageUrls: module.fetchImageUrls(images),
         dispatch,
+        openAiImageModal,
       }),
       quickbars_insert_toolbar: quickbarsInsertToolbar,
       quickbars_selection_toolbar: quickbarsSelectionToolbar,

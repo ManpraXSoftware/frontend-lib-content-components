@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Editor } from '@tinymce/tinymce-react';
@@ -25,6 +25,7 @@ import { selectors } from '../../data/redux';
 import ImageUploadModal from '../ImageUploadModal';
 import SourceCodeModal from '../SourceCodeModal';
 import * as hooks from './hooks';
+import AiModal from './AiModal';
 
 export const TinyMceWidget = ({
   editorType,
@@ -43,6 +44,12 @@ export const TinyMceWidget = ({
   const images = hooks.filterAssets({ assets });
   const imageSelection = hooks.selectedImage(null);
   const dispatch = useDispatch();
+  const [aiImagePrompt, setAiImagePrompt] = useState("");
+  const [aiImageIsOpen, setAiImageIsOpen] = useState(false);
+  const openAiImageModal = () => {
+    setAiImagePrompt(tinymce.activeEditor.selection.getContent());
+    setAiImageIsOpen(true);
+  }
   return (
     <>
       {isLibrary ? null : (
@@ -77,12 +84,14 @@ export const TinyMceWidget = ({
           studioEndpointUrl,
           images,
           dispatch: dispatch,
+          openAiImageModal: openAiImageModal,
           setSelection: imageSelection.setSelection,
           clearSelection: imageSelection.clearSelection,
           ...props,
         })
         }
       />
+      <AiModal close={() => setAiImageIsOpen(false)} isOpen={aiImageIsOpen} imagePrompt={aiImagePrompt} />
     </>
   );
 };

@@ -206,12 +206,12 @@ export const apiMethods = {
     urls.videoFeatures({ studioEndpointUrl, learningContextId }),
   ),
   rephrase: ({
-    course_key,
+    courseKey,
     content,
     studioEndpointUrl,
   }) => {
     const data = new FormData();
-    data.append('course_key', course_key);
+    data.append('course_key', courseKey);
     data.append('content', content);
     return post(
       urls.rephrase({ studioEndpointUrl }),
@@ -222,6 +222,22 @@ export const apiMethods = {
         tinymce.activeEditor.selection.setContent(data);
         tinymce.activeEditor.undoManager.add()
         tinymce.activeEditor.selection.select(tinymce.activeEditor.selection.getNode());
+        return data;
+      })
+  },
+  generateImage: ({
+    courseKey,
+    promptString,
+    studioEndpointUrl,
+  }) => {
+    const data = new FormData();
+    data.append('course_key', courseKey);
+    data.append('prompt', promptString);
+    return post(
+      urls.generateImage({ studioEndpointUrl }),
+      data,
+    ).then((res) => res.data)
+      .then((data) => {
         return data;
       })
   }

@@ -79,12 +79,21 @@ export const fetchVideos = ({ onSuccess }) => (dispatch) => {
   // onSuccess(mockData.mockVideoData);
 };
 
-export const rephrase = ({ course_key, content }) => (dispatch) => {
+export const rephrase = ({ courseKey, content }) => (dispatch) => {
   dispatch(requests.rephrase({
-    course_key: course_key,
+    courseKey: courseKey,
     content: content,
+    ...rest
   }));
 };
+
+export const generateImage = ({ courseKey, promptString, ...rest}) => (dispatch) => {
+  dispatch(requests.generateImage({
+    courseKey: courseKey,
+    promptString: promptString,
+    ...rest
+  }));
+}
 
 export default StrictDict({
   fetchBlock,
@@ -97,4 +106,5 @@ export default StrictDict({
   fetchAssets,
   uploadImage,
   rephrase,
+  generateImage,
 });

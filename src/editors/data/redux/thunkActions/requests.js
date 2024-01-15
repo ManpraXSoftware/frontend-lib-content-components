@@ -283,12 +283,24 @@ export const fetchVideoFeatures = ({ ...rest }) => (dispatch, getState) => {
   }));
 };
 
-export const rephrase = ({ course_key, content, ...rest }) => (dispatch, getState) => {
+export const rephrase = ({ courseKey, content, ...rest }) => (dispatch, getState) => {
   dispatch(module.networkRequest({
     requestKey: RequestKeys.rephrase,
     promise: api.rephrase({
-      course_key,
+      courseKey,
       content,
+      studioEndpointUrl: selectors.app.studioEndpointUrl(getState()),
+    }),
+    ...rest,
+  }));
+};
+
+export const generateImage = ({ courseKey, promptString, ...rest }) => (dispatch, getState) => {
+  dispatch(module.networkRequest({
+    requestKey: RequestKeys.generateImage,
+    promise: api.generateImage({
+      courseKey,
+      promptString,
       studioEndpointUrl: selectors.app.studioEndpointUrl(getState()),
     }),
     ...rest,
@@ -314,4 +326,5 @@ export default StrictDict({
   fetchAdvancedSettings,
   fetchVideoFeatures,
   rephrase,
+  generateImage
 });

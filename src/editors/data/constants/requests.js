@@ -28,4 +28,5 @@ export const RequestKeys = StrictDict({
   fetchAdvancedSettings: 'fetchAdvancedSettings',
   fetchVideoFeatures: 'fetchVideoFeatures',
   rephrase: 'rephrase',
+  generateImage: 'generateImage',
 });

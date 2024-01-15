@@ -70,3 +70,7 @@ export const videoFeatures = ({ studioEndpointUrl, learningContextId }) => (
 export const rephrase = ({ studioEndpointUrl }) => (
   `${studioEndpointUrl}/mxai/rephrase`
 )
+
+export const generateImage = ({studioEndpointUrl}) => (
+  `${studioEndpointUrl}/mxai/generate_image`
+)
