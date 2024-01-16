@@ -26,12 +26,16 @@ export const AiModal = ({
                 setIsError(false);
                 setErrorMessage("");
                 setGenerating(false);
+                if (imagePrompt) {
+                    submit();
+                }
             }
         },
         [isOpen]
     )
     const submit = () => {
         setGenerating(true);
+        setImageData("");
         var courseKey = window.location.pathname.split("/")[3];
         dispatch(thunkActions.app.generateImage({
             courseKey: courseKey,
@@ -65,28 +69,20 @@ export const AiModal = ({
                 isOpen={isOpen}
                 close={close}
                 title="AI Image Generator"
-                footerAction={(
-                    <Button
-                        onClick={submit}
-                        disabled={generating}
-                        variant="primary"
-                    >
-                        Generate Image
-                    </Button>
-                )}
                 confirmAction={(
-                    <Button
-                        onClick={accept}
-                        variant="primary"
-                        disabled={imageData ? false : true}
-                    >
+                    <Button onClick={accept} variant="primary" disabled={imageData ? false : true} >
                         Accept
                     </Button>
                 )}
                 size="xl"
             >
-                <label title='Prompt' />
-                <input type='text' value={promptString} disabled={generating} onChange={(e) => setPromptString(e.target.value)} />
+                <form onSubmit={submit}>
+                <label title='Prompt'>Prompt:</label>
+                <input style={{width:"100%", margin:"5px"}} type='text' value={promptString} disabled={generating} onChange={(e) => setPromptString(e.target.value)} />
+                <Button onClick={submit} disabled={generating} variant="primary">
+                    Generate Image
+                </Button>
+                </form>
                 <br />
                 {imageData ? (
                     <img src={`data:image/png;base64,${imageData}`} alt={imageData} />

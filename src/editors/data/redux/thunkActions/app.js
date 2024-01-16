@@ -79,7 +79,7 @@ export const fetchVideos = ({ onSuccess }) => (dispatch) => {
   // onSuccess(mockData.mockVideoData);
 };
 
-export const rephrase = ({ courseKey, content }) => (dispatch) => {
+export const rephrase = ({ courseKey, content, ...rest }) => (dispatch) => {
   dispatch(requests.rephrase({
     courseKey: courseKey,
     content: content,
