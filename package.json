@@ -26,17 +26,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edx/frontend-lib-content-components.git"
+    "url": "git+https://github.com/ManpraXSoftware/frontend-lib-content-components.git"
   },
-  "author": "edX",
+  "author": "ManpraXSoftware",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/edx/frontend-lib-content-components/issues"
+    "url": "https://github.com/ManpraXSoftware/frontend-lib-content-components/issues"
   },
   "browserslist": [
     "extends @edx/browserslist-config"
   ],
-  "homepage": "https://github.com/edx/frontend-lib-content-components#readme",
+  "homepage": "https://github.com/ManpraXSoftware/frontend-lib-content-components#readme",
   "devDependencies": {
     "@edx/browserslist-config": "^1.1.1",
     "@edx/frontend-build": "13.0.1",
