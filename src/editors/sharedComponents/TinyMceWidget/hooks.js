@@ -277,6 +277,7 @@ export const editorConfig = ({
       valid_children: '+body[style]',
       valid_elements: '*[*]',
       entity_encoding: 'utf-8',
+      toolbar_sticky: false,
     },
   };
 };
