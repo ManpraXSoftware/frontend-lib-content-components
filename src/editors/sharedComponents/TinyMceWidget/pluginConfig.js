@@ -90,7 +90,7 @@ const pluginConfig = ({ isLibrary, placeholder, editorType }) => {
         height: '100%',
         menubar: false,
         toolbar_mode: 'sliding',
-        toolbar_sticky: true,
+        toolbar_sticky: false,
         toolbar_sticky_offset: 76,
         relative_urls: true,
         convert_urls: false,
