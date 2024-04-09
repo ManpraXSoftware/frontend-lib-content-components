@@ -4,7 +4,8 @@
   "description": "A library of high-level components for content handling.",
   "main": "dist/index.js",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "@sagar-manprax:registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "make build",
