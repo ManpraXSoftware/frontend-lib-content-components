@@ -1,11 +1,11 @@
 {
-  "name": "@edx/frontend-lib-content-components",
+  "name": "@ManpraXSoftware/frontend-lib-content-components",
   "version": "1.0.0-semantically-released",
   "description": "A library of high-level components for content handling.",
   "main": "dist/index.js",
   "publishConfig": {
     "access": "public",
-    "@edx:registry": "https://npm.pkg.github.com"
+    "@ManpraXSoftware:registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "make build",
