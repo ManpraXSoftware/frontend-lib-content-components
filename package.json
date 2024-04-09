@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "publishConfig": {
     "access": "public",
-    "@sagar-manprax:registry": "https://npm.pkg.github.com"
+    "@edx:registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "make build",
